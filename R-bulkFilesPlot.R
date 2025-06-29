@@ -3,7 +3,9 @@ library(rstudioapi)
 library(readxl)
 library(writexl)
 
-locate_data_folder = function(){
+#-------------------- functions --------------------#
+#---------------------------------------------------#
+fun_locate_data_folder = function(){
   this_file = rstudioapi::getActiveDocumentContext()$path
   path = box::file()
   check_path = unlist(strsplit(this_file, split = "/"))
@@ -18,7 +20,7 @@ locate_data_folder = function(){
   }  
 }
 
-gather_all_data = function(){
+fun_gather_all_data = function(){
   data_files = list.files(pattern="*.xlsx", full.names=F)
   #data_list = lapply(data_files, read_xlsx)
   
@@ -38,12 +40,21 @@ gather_all_data = function(){
   return(list(all_data, used_files))
 }
 
+fun_get_title = function(question){
+  quest_title = names(plot_data[question])
+  quest_title = (gsub("...", ": ", quest_title, fixed = T))
+  quest_title = (gsub(".", " ", quest_title, fixed = T))
+  return(quest_title)
+}
+#-------------------- functions --------------------#
+#---------------------------------------------------#
 
-locate_data_folder()
-all_data = as.data.frame(gather_all_data()[1])
+fun_locate_data_folder()
+all_data = fun_gather_all_data()
 
-
-
+used_files = unlist(all_data[2])
+all_data = as.data.frame(all_data[1])
+plot_data = all_data[, 8:length(all_data)]
 
 
 #source("insert_testfiles.R")
@@ -51,15 +62,16 @@ all_data = as.data.frame(gather_all_data()[1])
 
 
 #----------------------- ploting -------------------------#
+doplot = T
 
-doplot = F
-
-if (doplot = T){
+if (doplot == T){
 
 
 #---- plots -----------#
-plot_this = all_data[6]
-graftitle = names(plot_this)
+
+no_quest = 12
+plot_this = all_data[no_quest]
+graftitle = fun_get_title(no_quest)
 
 
 
