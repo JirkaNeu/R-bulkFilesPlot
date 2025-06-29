@@ -3,41 +3,58 @@ library(rstudioapi)
 library(readxl)
 library(writexl)
 
-
-this_file = rstudioapi::getActiveDocumentContext()$path
-path = box::file()
-check_path = unlist(strsplit(this_file, split = "/"))
-check_path = paste0(check_path[1:length(check_path)-1], collapse="/")
-
-if (check_path != path){
-  warning("There might be issues related to the path of files.", call. = TRUE, immediate. = FALSE, domain = NULL)
+locate_data_folder = function(){
+  this_file = rstudioapi::getActiveDocumentContext()$path
+  path = box::file()
+  check_path = unlist(strsplit(this_file, split = "/"))
+  check_path = paste0(check_path[1:length(check_path)-1], collapse="/")
+  
+  if (check_path != path){
+    warning("There might be issues related to the path of files.", call. = TRUE, immediate. = FALSE, domain = NULL)
   }else{
-  setwd(file.path(path, "data"))
-  allfiles = dir()
-  #print(allfiles)
+    setwd(file.path(path, "data"))
+    #allfiles = dir()
+    #print(allfiles)
+  }  
 }
 
-source("insert_testfiles.R")
-
-data_files = list.files(pattern="*.xlsx", full.names=F)
-#data_list = lapply(data_files, read_xlsx)
-
-all_data = read_xlsx("_template.xlsx", col_names = T)
-print(names(all_data))
-
-for(i in 3:length(data_files)){
-  print(i)
-  next_file = read_xlsx(data_files[i], col_names = T)
-  colnames(next_file) = names(all_data)
-  all_data = rbind(all_data, next_file)
+gather_all_data = function(){
+  data_files = list.files(pattern="*.xlsx", full.names=F)
+  #data_list = lapply(data_files, read_xlsx)
+  
+  all_data = read_xlsx("_template.xlsx", col_names = T)
+  used_files = NULL
+  
+  for(i in 1:length(data_files)){
+    check_fname = substr(data_files[i], 1, 7)#--> read certain files only
+    if (check_fname == "results"){
+      used_files = append(used_files, data_files[i])
+      next_file = read_xlsx(data_files[i], col_names = T)
+      colnames(next_file) = names(all_data)
+      all_data = rbind(all_data, next_file) 
+    }
+  }
+  #write_xlsx(all_data, "_result_file.xlsx")
+  return(list(all_data, used_files))
 }
 
-#write_xlsx(all_data, "_result_file.xlsx")
+
+locate_data_folder()
+all_data = as.data.frame(gather_all_data()[1])
 
 
 
 
-if (plot = TRUE){
+
+#source("insert_testfiles.R")
+
+
+
+#----------------------- ploting -------------------------#
+
+doplot = F
+
+if (doplot = T){
 
 
 #---- plots -----------#
