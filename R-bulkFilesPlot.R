@@ -32,12 +32,16 @@ for(i in 3:length(data_files)){
   all_data = rbind(all_data, next_file)
 }
 
-#write_xlsx(all_data, "result_file.xlsx")
+#write_xlsx(all_data, "_result_file.xlsx")
 
+
+
+
+if (plot = TRUE){
 
 
 #---- plots -----------#
-plot_this = all_data[17]
+plot_this = all_data[6]
 graftitle = names(plot_this)
 
 
@@ -80,5 +84,6 @@ p1 = ggplot(ergebnis_2, aes(x=ergebnis_2[, 1], y=Freq)) +
 plot(p1)
 #---------------------
 
+}
 
 
