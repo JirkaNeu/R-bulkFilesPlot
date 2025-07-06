@@ -65,16 +65,16 @@ plot_data = all_data[, 8:length(all_data)]
 doplot = T
 
 if (doplot == T){
-
+  for (i in 1:length(plot_data)){
 
 #---- plots -----------#
 
-no_quest = 12
-plot_this = all_data[no_quest]
+no_quest = i
+plot_this = plot_data[no_quest]
 graftitle = fun_get_title(no_quest)
 
 
-
+'
 ergebnis = table(plot_this)
 #-------- plot -------
 yAchse = c(0, max(ergebnis) + round(max(ergebnis*0.2), 0))
@@ -83,7 +83,7 @@ par(mar=c(10, 4, 4, 2) +.1) #Darstellungsbereich für Labels vergrößern
 barplot(ergebnis, width = 0.9, main = strwrap(graftitle, width = 70), cex.main = 1, axes = T, ylim = yAchse, xpd = F, las = 2, cex.names = .8)
 text(ergebnis, labels = c(as.character(ergebnis)), cex = 1, col = "blue", pos = 3) #Datenbeschriftung
 #---------------------
-
+'
 
 ergebnis_2 = as.data.frame(table(plot_this))
 #-------- plot -------
@@ -114,5 +114,5 @@ plot(p1)
 #---------------------
 
 }
-
+}
 
