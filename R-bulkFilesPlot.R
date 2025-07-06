@@ -28,7 +28,7 @@ fun_gather_all_data = function(){
   used_files = NULL
   
   for(i in 1:length(data_files)){
-    check_fname = substr(data_files[i], 1, 7)#--> read certain files only
+    check_fname = substr(data_files[i], 1, 7)#--> read certain file names only
     if (check_fname == "results"){
       used_files = append(used_files, data_files[i])
       next_file = read_xlsx(data_files[i], col_names = T)
@@ -44,6 +44,7 @@ fun_get_title = function(question){
   quest_title = names(plot_data[question])
   quest_title = (gsub("...", ": ", quest_title, fixed = T))
   quest_title = (gsub(".", " ", quest_title, fixed = T))
+  quest_title = (gsub(": : : : :", ":", quest_title, fixed = T))
   return(quest_title)
 }
 #-------------------- functions --------------------#
