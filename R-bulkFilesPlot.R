@@ -3,8 +3,9 @@ library(rstudioapi)
 library(readxl)
 library(writexl)
 
-#-------------------- functions --------------------#
 #---------------------------------------------------#
+#-------------------- functions --------------------#
+
 fun_locate_data_folder = function(){
   this_file = rstudioapi::getActiveDocumentContext()$path
   path = box::file()
@@ -47,7 +48,8 @@ fun_get_title = function(question){
   quest_title = (gsub(": : : : :", ":", quest_title, fixed = T))
   return(quest_title)
 }
-#-------------------- functions --------------------#
+
+#---------------- end of functions -----------------#
 #---------------------------------------------------#
 
 fun_locate_data_folder()
@@ -74,6 +76,20 @@ no_quest = i
 plot_this = plot_data[no_quest]
 graftitle = fun_get_title(no_quest)
 
+    if (i == 1){
+      plot_this[,1] = as.numeric(substr(plot_this[,1], 1, 4))
+      dummy_year = 2024 #--> 2do: use year of timestamp in questionaire
+      plot_this[,1] = dummy_year - plot_this[,1]
+      plot_this$age_group[plot_this[,1] < 20] = "jünger als 20"
+      plot_this$age_group[plot_this[,1] >= 20 & plot_this[,1] < 30] = "20 bis 29"
+      plot_this$age_group[plot_this[,1] >= 30 & plot_this[,1] < 40] = "30 bis 39"
+      plot_this$age_group[plot_this[,1] >= 40 & plot_this[,1] < 50] = "40 bis 49"
+      plot_this$age_group[plot_this[,1] >= 50 & plot_this[,1] < 60] = "50 bis 59"
+      plot_this$age_group[plot_this[,1] >= 60] = "60 und älter"
+      len_obs = na.omit(c(plot_this[,2]))
+      graftitle = paste0("Altersgruppen der Teilnehmer/innen in Jahren zum Zeitpunkt der Befragung (N = ", length(len_obs), ")")
+      plot_this = plot_this[2]
+    }
 
 '
 ergebnis = table(plot_this)
