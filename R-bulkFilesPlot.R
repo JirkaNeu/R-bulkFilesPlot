@@ -2,6 +2,7 @@
 library(rstudioapi)
 library(readxl)
 library(writexl)
+library(ggplot2)
 
 #---------------------------------------------------#
 #-------------------- functions --------------------#
@@ -60,18 +61,16 @@ all_data = as.data.frame(all_data[1])
 plot_data = all_data[, 8:length(all_data)]
 
 
-#source("insert_testfiles.R")
 
+plot_vars = (1:length(plot_data))
+plot_vars = c(1:8)
+doplot = T
 
 
 #----------------------- ploting -------------------------#
-doplot = T
-
 if (doplot == T){
-  for (i in 1:length(plot_data)){
-
-#---- plots -----------#
-
+  for (i in plot_vars){
+#----------- plots -----------#
 no_quest = i
 plot_this = plot_data[no_quest]
 graftitle = fun_get_title(no_quest)
@@ -89,6 +88,10 @@ graftitle = fun_get_title(no_quest)
       len_obs = na.omit(c(plot_this[,2]))
       graftitle = paste0("Altersgruppen der Teilnehmer/innen in Jahren zum Zeitpunkt der Befragung (N = ", length(len_obs), ")")
       plot_this = plot_this[2]
+    }
+    
+    else if (i==2){
+      source("insert_testfiles.R")
     }
 
 '
