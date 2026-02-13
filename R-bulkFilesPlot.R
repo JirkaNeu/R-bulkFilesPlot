@@ -50,6 +50,9 @@ fun_get_title = function(question){
   return(quest_title)
 }
 
+
+
+
 #---------------- end of functions -----------------#
 #---------------------------------------------------#
 
@@ -64,6 +67,7 @@ plot_data = all_data[, 8:length(all_data)]
 
 plot_vars = (1:length(plot_data))
 plot_vars = c(1:8)
+plot_vars = c(1:3)
 doplot = T
 
 
@@ -74,6 +78,7 @@ if (doplot == T){
 no_quest = i
 plot_this = plot_data[no_quest]
 graftitle = fun_get_title(no_quest)
+
 
     if (i == 1){
       plot_this[,1] = as.numeric(substr(plot_this[,1], 1, 4))
@@ -88,50 +93,84 @@ graftitle = fun_get_title(no_quest)
       len_obs = na.omit(c(plot_this[,2]))
       graftitle = paste0("Altersgruppen der Teilnehmer/innen in Jahren zum Zeitpunkt der Befragung (N = ", length(len_obs), ")")
       plot_this = plot_this[2]
+      ##------------------------------------------------------------ 2do: als function definieren
+      ergebnis_2 = as.data.frame(table(plot_this))
+      #-------- plot -------
+      require(ggplot2)
+      
+      p1 = ggplot(ergebnis_2, aes(x=ergebnis_2[, 1], y=Freq)) + 
+        geom_bar(stat = "identity", color = "blue", fill="grey",) + 
+        geom_text(aes(label=Freq), vjust=-0.3, size=3.5) +
+        labs(title = paste0(graftitle, "\n")) + 
+        ylim(0, max(ergebnis_2$Freq)+round(max(ergebnis_2$Freq*0.25), 0)+1)+
+        theme(
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.background = element_blank(),
+          #axis.line.y = element_line(colour = "black"),
+          axis.line.y = element_blank(),
+          axis.line.x = element_blank(),
+          axis.title.x=element_blank(), #remove axis title
+          axis.title.y=element_blank(), #remove axis title
+          axis.text.y=element_blank(),  #remove axis labels
+          #axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+          axis.text.x = element_text(angle = 35, vjust = 0.5, hjust=.35),
+          axis.ticks.x=element_blank(),  #remove axis ticks
+          axis.ticks.y=element_blank()  #remove axis ticks
+        )
+      plot(p1)
+      ##------------------------------------------------------------ 2do: als function definieren
     }
-    
-    else if (i==2){
-      source("insert_testfiles.R")
+
+    else if (i == 2){
+      insert = "../bulk_donut.R"
+      if(file.exists(insert)){print(
+        paste("inject ", insert))
+        source(insert)
+        plot(p_insert)
+      }else {print(paste("file", insert, "not found for Column", i))}
     }
 
-'
-ergebnis = table(plot_this)
-#-------- plot -------
-yAchse = c(0, max(ergebnis) + round(max(ergebnis*0.2), 0))
-if(max(ergebnis) == 1 ){yAchse = c(0, 2)} #y-Achse ggf. auf 2 setzen
-par(mar=c(10, 4, 4, 2) +.1) #Darstellungsbereich für Labels vergrößern
-barplot(ergebnis, width = 0.9, main = strwrap(graftitle, width = 70), cex.main = 1, axes = T, ylim = yAchse, xpd = F, las = 2, cex.names = .8)
-text(ergebnis, labels = c(as.character(ergebnis)), cex = 1, col = "blue", pos = 3) #Datenbeschriftung
-#---------------------
-'
-
-ergebnis_2 = as.data.frame(table(plot_this))
-#-------- plot -------
-require(ggplot2)
-
-p1 = ggplot(ergebnis_2, aes(x=ergebnis_2[, 1], y=Freq)) + 
-  geom_bar(stat = "identity", color = "blue", fill="grey",) + 
-  geom_text(aes(label=Freq), vjust=-0.3, size=3.5) +
-  labs(title = paste0(graftitle, "\n")) + 
-  ylim(0, max(ergebnis_2$Freq)+round(max(ergebnis_2$Freq*0.25), 0)+1)+
-  theme(
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(),
-    #axis.line.y = element_line(colour = "black"),
-    axis.line.y = element_blank(),
-    axis.line.x = element_blank(),
-    axis.title.x=element_blank(), #remove axis title
-    axis.title.y=element_blank(), #remove axis title
-    axis.text.y=element_blank(),  #remove axis labels
-    #axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
-    axis.text.x = element_text(angle = 35, vjust = 0.5, hjust=.35),
-    axis.ticks.x=element_blank(),  #remove axis ticks
-    axis.ticks.y=element_blank()  #remove axis ticks
-  )
-
-plot(p1)
-#---------------------
+    else{
+      '
+      ergebnis = table(plot_this)
+      #-------- plot -------
+      yAchse = c(0, max(ergebnis) + round(max(ergebnis*0.2), 0))
+      if(max(ergebnis) == 1 ){yAchse = c(0, 2)} #y-Achse ggf. auf 2 setzen
+      par(mar=c(10, 4, 4, 2) +.1) #Darstellungsbereich für Labels vergrößern
+      barplot(ergebnis, width = 0.9, main = strwrap(graftitle, width = 70), cex.main = 1, axes = T, ylim = yAchse, xpd = F, las = 2, cex.names = .8)
+      text(ergebnis, labels = c(as.character(ergebnis)), cex = 1, col = "blue", pos = 3) #Datenbeschriftung
+      #---------------------
+      '
+      
+      ergebnis_2 = as.data.frame(table(plot_this))
+      #-------- plot -------
+      require(ggplot2)
+      
+      p1 = ggplot(ergebnis_2, aes(x=ergebnis_2[, 1], y=Freq)) + 
+        geom_bar(stat = "identity", color = "blue", fill="grey",) + 
+        geom_text(aes(label=Freq), vjust=-0.3, size=3.5) +
+        labs(title = paste0(graftitle, "\n")) + 
+        ylim(0, max(ergebnis_2$Freq)+round(max(ergebnis_2$Freq*0.25), 0)+1)+
+        theme(
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.background = element_blank(),
+          #axis.line.y = element_line(colour = "black"),
+          axis.line.y = element_blank(),
+          axis.line.x = element_blank(),
+          axis.title.x=element_blank(), #remove axis title
+          axis.title.y=element_blank(), #remove axis title
+          axis.text.y=element_blank(),  #remove axis labels
+          #axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+          axis.text.x = element_text(angle = 35, vjust = 0.5, hjust=.35),
+          axis.ticks.x=element_blank(),  #remove axis ticks
+          axis.ticks.y=element_blank()  #remove axis ticks
+        )
+      
+      plot(p1)
+      #---------------------
+    }
 
 }
 }
