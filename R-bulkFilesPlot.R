@@ -128,6 +128,7 @@ graftitle = fun_get_title(no_quest)
         paste("inject ", insert))
         source(insert)
         plot(p_insert)
+        rm(p_insert)
       }else {print(paste("file", insert, "not found for Column", i))}
     }
 
