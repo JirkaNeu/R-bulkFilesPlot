@@ -66,8 +66,8 @@ plot_data = all_data[, 8:length(all_data)]
 
 
 plot_vars = (1:length(plot_data))
-plot_vars = c(1:8)
-plot_vars = c(1:3)
+plot_vars = c(1:18)
+#plot_vars = c(1:3)
 doplot = T
 
 
@@ -132,7 +132,18 @@ graftitle = fun_get_title(no_quest)
       }else {print(paste("file", insert, "not found for Column", i))}
     }
 
+    else if (i == 16){
+      insert = "../bulk_donut.R"
+      if(file.exists(insert)){print(
+        paste("inject ", insert))
+        source(insert)
+        plot(p_insert)
+        rm(p_insert)
+      }else {print(paste("file", insert, "not found for Column", i))}
+    }
+
     else{
+      
       '
       ergebnis = table(plot_this)
       #-------- plot -------
