@@ -2,6 +2,7 @@
 library(rstudioapi)
 library(readxl)
 library(writexl)
+library(gridExtra)
 library(ggplot2)
 
 #---------------------------------------------------#
@@ -14,7 +15,7 @@ fun_locate_data_folder = function(){
   check_path = paste0(check_path[1:length(check_path)-1], collapse="/")
   
   if (check_path != path){
-    warning("There might be issues related to the path of files.", call. = TRUE, immediate. = FALSE, domain = NULL)
+    warning("There might be issues related to the path...", call. = TRUE, immediate. = FALSE, domain = NULL)
   }else{
     setwd(file.path(path, "data"))
     #allfiles = dir()
@@ -66,9 +67,13 @@ plot_data = all_data[, 8:length(all_data)]
 
 
 plot_vars = (1:length(plot_data))
-plot_vars = c(1:18)
+plot_vars = c(1:20)
 #plot_vars = c(1:3)
 doplot = T
+
+
+xsuche = gsub(" ", ".", "Würden Sie die Angebote des Zukunftszentrum weiterempfehlen.")
+findcolindex = which(colnames(plot_data) == xsuche)
 
 
 #----------------------- ploting -------------------------#
@@ -132,14 +137,20 @@ graftitle = fun_get_title(no_quest)
       }else {print(paste("file", insert, "not found for Column", i))}
     }
 
-    else if (i == 16){
-      insert = "../bulk_donut.R"
+    else if (i == 19){
+      #ergebnis = as.data.frame(na.omit(plot_data[19]))
+      ergebnis = as.data.frame(na.omit(plot_this)) #--> bad plot
+      #ergebnis = as.data.frame(plot_this)
+      grid.table(ergebnis)
+      '
+      insert = "../bulk_table.R"
       if(file.exists(insert)){print(
         paste("inject ", insert))
         source(insert)
         plot(p_insert)
         rm(p_insert)
       }else {print(paste("file", insert, "not found for Column", i))}
+      '
     }
 
     else{
