@@ -37,7 +37,7 @@ p_insert =  ggplot(gender_df, aes(x = hsize, y = g_count, fill = Gender)) +
   #xlim(c(0.5, hsize + 1,5)) +
   #xlim(c(0.5, hsize + 1)) +
   xlim(c(0.6, hsize + .7)) +
-  ggtitle("Angaben zur Identität") +
+  ggtitle("Angaben zur Geschlechtsidentität") +
   theme(panel.background = element_rect(fill = "white"),
         panel.grid = element_blank(),
         axis.title = element_blank(),

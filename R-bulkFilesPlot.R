@@ -5,29 +5,33 @@ library(writexl)
 library(gridExtra)
 library(ggplot2)
 
-#---------------------------------------------------#
-#-------------------- functions --------------------#
 
-fun_locate_data_folder = function(){
-  this_file = rstudioapi::getActiveDocumentContext()$path
-  path = box::file()
-  check_path = unlist(strsplit(this_file, split = "/"))
-  check_path = paste0(check_path[1:length(check_path)-1], collapse="/")
-  
-  if (check_path != path){
-    warning("There might be issues related to the path...", call. = TRUE, immediate. = FALSE, domain = NULL)
-  }else{
-    setwd(file.path(path, "data"))
-    #allfiles = dir()
-    #print(allfiles)
-  }  
+this_file = rstudioapi::getActiveDocumentContext()$path
+path = box::file()
+check_path = unlist(strsplit(this_file, split = "/"))
+check_path = paste0(check_path[1:length(check_path)-1], collapse="/")
+
+if (check_path != path){
+  warning("There might be issues related to the path...", call. = TRUE, immediate. = FALSE, domain = NULL)
+}else{
+  setwd(file.path(path, "files"))
+  #allfiles = dir()
+  #print(allfiles)
 }
+
+
+
+# functions ---------------------------------------------------------------
+
 
 fun_gather_all_data = function(){
   data_files = list.files(pattern="*.xlsx", full.names=F)
   #data_list = lapply(data_files, read_xlsx)
   
-  all_data = read_xlsx("_template.xlsx", col_names = T)
+  names_all = c("Antwort ID", "Datum Abgeschickt", "Letzte Seite", "Start-Sprache", "Zufallsgeneratorstartwert", "Datum gestartet", "Datum letzte Aktivität", "In welchem Jahr sind Sie geboren?", "Angaben zur Geschlechtsidentität.", "Was ist Ihr höchster Bildungsabschluss?")
+  all_data = data.frame(matrix(ncol = length(names_all), nrow = 0))
+  colnames(all_data) = names_all
+  
   used_files = NULL
   
   for(i in 1:length(data_files)){
@@ -52,12 +56,6 @@ fun_get_title = function(question){
 }
 
 
-
-
-#---------------- end of functions -----------------#
-#---------------------------------------------------#
-
-fun_locate_data_folder()
 all_data = fun_gather_all_data()
 
 used_files = unlist(all_data[2])
@@ -65,18 +63,15 @@ all_data = as.data.frame(all_data[1])
 plot_data = all_data[, 8:length(all_data)]
 
 
-
 plot_vars = (1:length(plot_data))
-plot_vars = c(1:20)
-#plot_vars = c(1:3)
+#plot_vars = c(1:13)
 doplot = T
 
 
-xsuche = gsub(" ", ".", "Würden Sie die Angebote des Zukunftszentrum weiterempfehlen.")
-findcolindex = which(colnames(plot_data) == xsuche)
+
+# plots -------------------------------------------------------------------
 
 
-#----------------------- ploting -------------------------#
 if (doplot == T){
   for (i in plot_vars){
 #----------- plots -----------#
@@ -142,29 +137,9 @@ graftitle = fun_get_title(no_quest)
       ergebnis = as.data.frame(na.omit(plot_this)) #--> bad plot
       #ergebnis = as.data.frame(plot_this)
       grid.table(ergebnis)
-      '
-      insert = "../bulk_table.R"
-      if(file.exists(insert)){print(
-        paste("inject ", insert))
-        source(insert)
-        plot(p_insert)
-        rm(p_insert)
-      }else {print(paste("file", insert, "not found for Column", i))}
-      '
     }
 
     else{
-      
-      '
-      ergebnis = table(plot_this)
-      #-------- plot -------
-      yAchse = c(0, max(ergebnis) + round(max(ergebnis*0.2), 0))
-      if(max(ergebnis) == 1 ){yAchse = c(0, 2)} #y-Achse ggf. auf 2 setzen
-      par(mar=c(10, 4, 4, 2) +.1) #Darstellungsbereich für Labels vergrößern
-      barplot(ergebnis, width = 0.9, main = strwrap(graftitle, width = 70), cex.main = 1, axes = T, ylim = yAchse, xpd = F, las = 2, cex.names = .8)
-      text(ergebnis, labels = c(as.character(ergebnis)), cex = 1, col = "blue", pos = 3) #Datenbeschriftung
-      #---------------------
-      '
       
       ergebnis_2 = as.data.frame(table(plot_this))
       #-------- plot -------
