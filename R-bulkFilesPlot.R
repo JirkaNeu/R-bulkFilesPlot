@@ -14,7 +14,8 @@ check_path = paste0(check_path[1:length(check_path)-1], collapse="/")
 if (check_path != path){
   warning("There might be issues related to the path...", call. = TRUE, immediate. = FALSE, domain = NULL)
 }else{
-  setwd(file.path(path, "files"))
+  #setwd(file.path(path, "files"))
+  setwd(file.path(path, "data"))
   #allfiles = dir()
   #print(allfiles)
 }
@@ -28,7 +29,7 @@ fun_gather_all_data = function(){
   data_files = list.files(pattern="*.xlsx", full.names=F)
   #data_list = lapply(data_files, read_xlsx)
   
-  names_all = c("Antwort ID", "Datum Abgeschickt", "Letzte Seite", "Start-Sprache", "Zufallsgeneratorstartwert", "Datum gestartet", "Datum letzte Aktivität", "In welchem Jahr sind Sie geboren?", "Angaben zur Geschlechtsidentität.", "Was ist Ihr höchster Bildungsabschluss?")
+  names_all = c("Antwort ID", "Datum Abgeschickt", "Letzte Seite", "Start-Sprache", "Zufallsgeneratorstartwert", "Datum gestartet", "Datum letzte Aktivität", "In welchem Jahr sind Sie geboren?", "Angaben zur Geschlechtsidentität.", "Was ist Ihr höchster Bildungsabschluss?", "ildungsabschluss [Sonstiges]", "Das Angebot war interaktiv gestaltet.", "Der Anteil an Übungen / Interaktivem war angemessen.", "Der Anteil an Inputs / Vorträgen war angemessen.", "Die vermittelten Inhalte sind relevant für meine Arbeit.", "Das Thema ökologische Nachhaltigkeit wurde behandelt.", "Das Thema Gleichstellung der Geschlechter wurde behandelt.", "Die Inhalte waren verständlich aufbereitet.", "Der Aufbau des Angebotes war für mich nachvollziehbar.", "Ich habe Neues dazugelernt.", "Der zeitliche Umfang des Angebots war angemessen.", "Wurden digitale Tools / Hilfsmittel genutzt (z.B. von den Teilnehmenden oder von den Beratenden)?", "Ich habe mich bei der Nutzung der digitalen Tools / Hilfsmittel gut zurechtgefunden.", "Die digitalen Tools / Hilfsmittel wurden sinnvoll eingebunden.", "Würden Sie die Angebote des Zukunftszentrum weiterempfehlen?", "Warum würden Sie das Zukunftszentrum weiterempfehlen?", "Warum würden Sie das Zukunftszentrum nicht weiterempfehlen?", "Gab es Phasen mit selbständigem Lernen/Erarbeiten?", "Ich habe immer verstanden, was in den Selbstlernphasen zu tun war.", "Die Selbstlernphasen wurden sinnvoll eingesetzt.", "Meine Erwartungen an das Angebot wurden erfüllt.", "Was hat dazu geführt, dass Ihre Erwartungen erfüllt wurden?", "Was hat dazu geführt, dass Ihre Erwartungen nicht erfüllt wurden?", "Weitere Unterstützung gewünscht bei: Agiles Arbeiten", "Weitere Unterstützung gewünscht bei: Moderne Personalführung", "Weitere Unterstützung gewünscht bei: Wissensmanagement und digitales Lernen", "Weitere Unterstützung gewünscht bei: Mitbestimmung im Betrieb", "Weitere Unterstützung gewünscht bei: Gesundheit und Resilienz", "Weitere Unterstützung gewünscht bei: Künstliche Intelligenz", "Weitere Unterstützung gewünscht bei: Sichtbarkeit im öffentlichen Raum", "Weitere Unterstützung gewünscht bei: Sonstiges", "Arbeit und Alltag [Ich finde meine Arbeit abwechslungsreich.]", "Arbeit und Alltag [Ich arbeite im Team.]", "Arbeit und Alltag [Ich bekomme Anerkennung für meine Arbeit.]", "Arbeit und Alltag [Ich habe flexible Arbeitszeiten.]", "Arbeit und Alltag [Ich arbeite Vollzeit (35 Stunden oder mehr).]", "Arbeit und Alltag [Ich habe Betreuungspflichten (Kinder / pflegebedürftige Angehörige).]", "Arbeit und Alltag [Ich kann auch von Zuhause aus arbeiten.]", "Arbeit und Alltag [Ich bin in meiner Freizeit ehrenamtlich aktiv.]", "Arbeit und Alltag [Ich bin in meiner Freizeit politisch aktiv.]", "Arbeit und Alltag [Meine Muttersprache ist Deutsch.]", "Name des Unternehmens", "IQK / Beratung [Modul 1 - Digital-Agile Führung]", "IQK / Beratung [Modul 2 - Digital-Agile Kommunikation]", "IQK / Beratung [Modul 3 - Digitalisierung: Mitarbeitende einbinden]", "IQK / Beratung [Modul 4 - Lernkultur und Lerntools]", "IQK / Beratung [Modul 5 - Gesund, motiviert und arbeitsfähig]", "IQK / Beratung [Modul 6 - Sichtbarkeit im digitalen Raum]", "IQK / Beratung [Modul 7 - Einführung neuer Technologien]", "IQK / Beratung [Modul 8 - Datenkompetenz und Daten]", "IQK / Beratung [Modul 9 - KI-Wissen]", "IQK / Beratung [Vertiefte Beratung]", "Mitarbeitendenzahl", "Branche", "von Menschen mit Migrationshintergrund gegründet/geführt", "Von Menschen mit Migrationsgeschichte (1. Generation) gegründet/geführt", "Mehr als 50% der Belegschaft im Unternehmen hat einen Migrationshintergrund (ja/nein).", "Betriebsrat vorhanden? (ja/nein) Wenn ja, wie viele Betriebsratsmitglieder (sofern bekannt)?", "Zeitraum der Durchführung", "Handelt es sich um einen Ausbildungsbetrieb?")
   all_data = data.frame(matrix(ncol = length(names_all), nrow = 0))
   colnames(all_data) = names_all
   
@@ -73,13 +74,19 @@ doplot = T
 
 
 if (doplot == T){
+  
+  #--> use PDF:
+  pdf("LimesSurvey_alleErgebnisse.pdf", width = 12, height = 8, paper = "a4r")
+  par(mfrow = c(4, 1), mar = c(2, 2, 2, 2))
+  
+  
   for (i in plot_vars){
-#----------- plots -----------#
-no_quest = i
-plot_this = plot_data[no_quest]
-graftitle = fun_get_title(no_quest)
-
-
+    #----------- plots -----------#
+    no_quest = i
+    plot_this = plot_data[no_quest]
+    graftitle = fun_get_title(no_quest)
+    
+    
     if (i == 1){
       plot_this[,1] = as.numeric(substr(plot_this[,1], 1, 4))
       dummy_year = 2024 #--> 2do: use year of timestamp in questionaire
@@ -121,7 +128,7 @@ graftitle = fun_get_title(no_quest)
       plot(p1)
       ##------------------------------------------------------------ 2do: als function definieren
     }
-
+    
     else if (i == 2){
       insert = "../bulk_donut.R"
       if(file.exists(insert)){print(
@@ -131,14 +138,14 @@ graftitle = fun_get_title(no_quest)
         rm(p_insert)
       }else {print(paste("file", insert, "not found for Column", i))}
     }
-
+    
     else if (i == 19){
       #ergebnis = as.data.frame(na.omit(plot_data[19]))
       ergebnis = as.data.frame(na.omit(plot_this)) #--> bad plot
       #ergebnis = as.data.frame(plot_this)
       grid.table(ergebnis)
     }
-
+    
     else{
       
       ergebnis_2 = as.data.frame(table(plot_this))
@@ -169,7 +176,10 @@ graftitle = fun_get_title(no_quest)
       plot(p1)
       #---------------------
     }
-
-}
+    
+  }
+  
+  #--> close PDF
+  dev.off()
 }
 
