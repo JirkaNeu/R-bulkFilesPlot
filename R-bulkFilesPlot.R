@@ -29,7 +29,7 @@ fun_gather_all_data = function(){
   data_files = list.files(pattern="*.xlsx", full.names=F)
   #data_list = lapply(data_files, read_xlsx)
   
-  names_all = c("Antwort ID", "Datum Abgeschickt", "Letzte Seite", "Start-Sprache", "Zufallsgeneratorstartwert", "Datum gestartet", "Datum letzte Aktivität", "In welchem Jahr sind Sie geboren?", "Angaben zur Geschlechtsidentität.", "Was ist Ihr höchster Bildungsabschluss?", "ildungsabschluss [Sonstiges]", "Das Angebot war interaktiv gestaltet.", "Der Anteil an Übungen / Interaktivem war angemessen.", "Der Anteil an Inputs / Vorträgen war angemessen.", "Die vermittelten Inhalte sind relevant für meine Arbeit.", "Das Thema ökologische Nachhaltigkeit wurde behandelt.", "Das Thema Gleichstellung der Geschlechter wurde behandelt.", "Die Inhalte waren verständlich aufbereitet.", "Der Aufbau des Angebotes war für mich nachvollziehbar.", "Ich habe Neues dazugelernt.", "Der zeitliche Umfang des Angebots war angemessen.", "Wurden digitale Tools / Hilfsmittel genutzt (z.B. von den Teilnehmenden oder von den Beratenden)?", "Ich habe mich bei der Nutzung der digitalen Tools / Hilfsmittel gut zurechtgefunden.", "Die digitalen Tools / Hilfsmittel wurden sinnvoll eingebunden.", "Würden Sie die Angebote des Zukunftszentrum weiterempfehlen?", "Warum würden Sie das Zukunftszentrum weiterempfehlen?", "Warum würden Sie das Zukunftszentrum nicht weiterempfehlen?", "Gab es Phasen mit selbständigem Lernen/Erarbeiten?", "Ich habe immer verstanden, was in den Selbstlernphasen zu tun war.", "Die Selbstlernphasen wurden sinnvoll eingesetzt.", "Meine Erwartungen an das Angebot wurden erfüllt.", "Was hat dazu geführt, dass Ihre Erwartungen erfüllt wurden?", "Was hat dazu geführt, dass Ihre Erwartungen nicht erfüllt wurden?", "Weitere Unterstützung gewünscht bei: Agiles Arbeiten", "Weitere Unterstützung gewünscht bei: Moderne Personalführung", "Weitere Unterstützung gewünscht bei: Wissensmanagement und digitales Lernen", "Weitere Unterstützung gewünscht bei: Mitbestimmung im Betrieb", "Weitere Unterstützung gewünscht bei: Gesundheit und Resilienz", "Weitere Unterstützung gewünscht bei: Künstliche Intelligenz", "Weitere Unterstützung gewünscht bei: Sichtbarkeit im öffentlichen Raum", "Weitere Unterstützung gewünscht bei: Sonstiges", "Arbeit und Alltag [Ich finde meine Arbeit abwechslungsreich.]", "Arbeit und Alltag [Ich arbeite im Team.]", "Arbeit und Alltag [Ich bekomme Anerkennung für meine Arbeit.]", "Arbeit und Alltag [Ich habe flexible Arbeitszeiten.]", "Arbeit und Alltag [Ich arbeite Vollzeit (35 Stunden oder mehr).]", "Arbeit und Alltag [Ich habe Betreuungspflichten (Kinder / pflegebedürftige Angehörige).]", "Arbeit und Alltag [Ich kann auch von Zuhause aus arbeiten.]", "Arbeit und Alltag [Ich bin in meiner Freizeit ehrenamtlich aktiv.]", "Arbeit und Alltag [Ich bin in meiner Freizeit politisch aktiv.]", "Arbeit und Alltag [Meine Muttersprache ist Deutsch.]", "Name des Unternehmens", "IQK / Beratung [Modul 1 - Digital-Agile Führung]", "IQK / Beratung [Modul 2 - Digital-Agile Kommunikation]", "IQK / Beratung [Modul 3 - Digitalisierung: Mitarbeitende einbinden]", "IQK / Beratung [Modul 4 - Lernkultur und Lerntools]", "IQK / Beratung [Modul 5 - Gesund, motiviert und arbeitsfähig]", "IQK / Beratung [Modul 6 - Sichtbarkeit im digitalen Raum]", "IQK / Beratung [Modul 7 - Einführung neuer Technologien]", "IQK / Beratung [Modul 8 - Datenkompetenz und Daten]", "IQK / Beratung [Modul 9 - KI-Wissen]", "IQK / Beratung [Vertiefte Beratung]", "Mitarbeitendenzahl", "Branche", "von Menschen mit Migrationshintergrund gegründet/geführt", "Von Menschen mit Migrationsgeschichte (1. Generation) gegründet/geführt", "Mehr als 50% der Belegschaft im Unternehmen hat einen Migrationshintergrund (ja/nein).", "Betriebsrat vorhanden? (ja/nein) Wenn ja, wie viele Betriebsratsmitglieder (sofern bekannt)?", "Zeitraum der Durchführung", "Handelt es sich um einen Ausbildungsbetrieb?")
+  names_all = c("Antwort ID", "Datum Abgeschickt", "Letzte Seite", "Start-Sprache", "Zufallsgeneratorstartwert", "Datum gestartet", "Datum letzte Aktivität", "In welchem Jahr sind Sie geboren?", "Angaben zur Geschlechtsidentität.", "Was ist Ihr höchster Bildungsabschluss?", "Bildungsabschluss - Sonstiges", "Das Angebot war interaktiv gestaltet.", "Der Anteil an Übungen / Interaktivem war angemessen.", "Der Anteil an Inputs / Vorträgen war angemessen.", "Die vermittelten Inhalte sind relevant für meine Arbeit.", "Das Thema ökologische Nachhaltigkeit wurde behandelt.", "Das Thema Gleichstellung der Geschlechter wurde behandelt.", "Die Inhalte waren verständlich aufbereitet.", "Der Aufbau des Angebotes war für mich nachvollziehbar.", "Ich habe Neues dazugelernt.", "Der zeitliche Umfang des Angebots war angemessen.", "Wurden digitale Tools / Hilfsmittel genutzt (z.B. von den Teilnehmenden oder von den Beratenden)?", "Ich habe mich bei der Nutzung der digitalen Tools / Hilfsmittel gut zurechtgefunden.", "Die digitalen Tools / Hilfsmittel wurden sinnvoll eingebunden.", "Würden Sie die Angebote des Zukunftszentrum weiterempfehlen?", "Warum würden Sie das Zukunftszentrum weiterempfehlen?", "Warum würden Sie das Zukunftszentrum nicht weiterempfehlen?", "Gab es Phasen mit selbständigem Lernen/Erarbeiten?", "Ich habe immer verstanden, was in den Selbstlernphasen zu tun war.", "Die Selbstlernphasen wurden sinnvoll eingesetzt.", "Meine Erwartungen an das Angebot wurden erfüllt.", "Was hat dazu geführt, dass Ihre Erwartungen erfüllt wurden?", "Was hat dazu geführt, dass Ihre Erwartungen nicht erfüllt wurden?", "Weitere Unterstützung gewünscht bei: Agiles Arbeiten", "Weitere Unterstützung gewünscht bei: Moderne Personalführung", "Weitere Unterstützung gewünscht bei: Wissensmanagement und digitales Lernen", "Weitere Unterstützung gewünscht bei: Mitbestimmung im Betrieb", "Weitere Unterstützung gewünscht bei: Gesundheit und Resilienz", "Weitere Unterstützung gewünscht bei: Künstliche Intelligenz", "Weitere Unterstützung gewünscht bei: Sichtbarkeit im öffentlichen Raum", "Weitere Unterstützung gewünscht bei: Sonstiges", "Arbeit und Alltag:\nIch finde meine Arbeit abwechslungsreich.", "Arbeit und Alltag:\nIch arbeite im Team.", "Arbeit und Alltag:\nIch bekomme Anerkennung für meine Arbeit.", "Arbeit und Alltag:\nIch habe flexible Arbeitszeiten.", "Arbeit und Alltag:\nIch arbeite Vollzeit (35 Stunden oder mehr).", "Arbeit und Alltag:\nIch habe Betreuungspflichten (Kinder / pflegebedürftige Angehörige).", "Arbeit und Alltag:Ich kann auch von Zuhause aus arbeiten.", "Arbeit und Alltag:\nIch bin in meiner Freizeit ehrenamtlich aktiv.", "Arbeit und Alltag:\nIch bin in meiner Freizeit politisch aktiv.", "Arbeit und Alltag:\nMeine Muttersprache ist Deutsch.", "Name des Unternehmens", "IQK / Beratung [Modul 1 - Digital-Agile Führung]", "IQK / Beratung [Modul 2 - Digital-Agile Kommunikation]", "IQK / Beratung [Modul 3 - Digitalisierung: Mitarbeitende einbinden]", "IQK / Beratung [Modul 4 - Lernkultur und Lerntools]", "IQK / Beratung [Modul 5 - Gesund, motiviert und arbeitsfähig]", "IQK / Beratung [Modul 6 - Sichtbarkeit im digitalen Raum]", "IQK / Beratung [Modul 7 - Einführung neuer Technologien]", "IQK / Beratung [Modul 8 - Datenkompetenz und Daten]", "IQK / Beratung [Modul 9 - KI-Wissen]", "IQK / Beratung [Vertiefte Beratung]", "Mitarbeitendenzahl", "Branche", "von Menschen mit Migrationshintergrund gegründet/geführt", "Von Menschen mit Migrationsgeschichte (1. Generation) gegründet/geführt", "Mehr als 50% der Belegschaft im Unternehmen hat einen Migrationshintergrund (ja/nein).", "Betriebsrat vorhanden? (ja/nein) Wenn ja, wie viele Betriebsratsmitglieder (sofern bekannt)?", "Zeitraum der Durchführung", "Handelt es sich um einen Ausbildungsbetrieb?")
   all_data = data.frame(matrix(ncol = length(names_all), nrow = 0))
   colnames(all_data) = names_all
   
@@ -61,8 +61,14 @@ all_data = fun_gather_all_data()
 
 used_files = unlist(all_data[2])
 all_data = as.data.frame(all_data[1])
+
 plot_data = all_data[, 8:length(all_data)]
 
+#--> replace the following by NA:
+plot_data[plot_data == "Keine Antwort"] = NA
+plot_data[plot_data == "Keine Angabe"] = NA
+plot_data[plot_data == "N. v."] = NA
+plot_data[plot_data == "N/A"] = NA
 
 plot_vars = (1:length(plot_data))
 #plot_vars = c(1:13)
@@ -82,6 +88,7 @@ if (doplot == T){
   
   for (i in plot_vars){
     #----------- plots -----------#
+
     no_quest = i
     plot_this = plot_data[no_quest]
     graftitle = fun_get_title(no_quest)
@@ -105,11 +112,13 @@ if (doplot == T){
       #-------- plot -------
       require(ggplot2)
       
-      p1 = ggplot(ergebnis_2, aes(x=ergebnis_2[, 1], y=Freq)) + 
-        geom_bar(stat = "identity", color = "blue", fill="grey",) + 
-        geom_text(aes(label=Freq), vjust=-0.3, size=3.5) +
+      light = "#6BA1BB"
+      
+      p1 = ggplot(ergebnis_2, aes(x = ergebnis_2[, 1], y = Freq)) + 
+        geom_bar(stat = "identity", color = "black", fill = light,) + 
+        geom_text(aes(label = Freq), vjust = -0.3, size = 3.5) +
         labs(title = paste0(graftitle, "\n")) + 
-        ylim(0, max(ergebnis_2$Freq)+round(max(ergebnis_2$Freq*0.25), 0)+1)+
+        ylim(0, max(ergebnis_2$Freq) + round(max(ergebnis_2$Freq*0.25), 0) + 1) +
         theme(
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
@@ -117,13 +126,13 @@ if (doplot == T){
           #axis.line.y = element_line(colour = "black"),
           axis.line.y = element_blank(),
           axis.line.x = element_blank(),
-          axis.title.x=element_blank(), #remove axis title
-          axis.title.y=element_blank(), #remove axis title
-          axis.text.y=element_blank(),  #remove axis labels
+          axis.title.x = element_blank(), #remove axis title
+          axis.title.y = element_blank(), #remove axis title
+          axis.text.y = element_blank(),  #remove axis labels
           #axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
-          axis.text.x = element_text(angle = 35, vjust = 0.5, hjust=.35),
-          axis.ticks.x=element_blank(),  #remove axis ticks
-          axis.ticks.y=element_blank()  #remove axis ticks
+          axis.text.x = element_text(angle = 35, vjust = 0.5, hjust = 0.35),
+          axis.ticks.x = element_blank(),  #remove axis ticks
+          axis.ticks.y = element_blank()  #remove axis ticks
         )
       plot(p1)
       ##------------------------------------------------------------ 2do: als function definieren
@@ -152,9 +161,9 @@ if (doplot == T){
       #-------- plot -------
       require(ggplot2)
       
-      p1 = ggplot(ergebnis_2, aes(x=ergebnis_2[, 1], y=Freq)) + 
-        geom_bar(stat = "identity", color = "blue", fill="grey",) + 
-        geom_text(aes(label=Freq), vjust=-0.3, size=3.5) +
+      p1 = ggplot(ergebnis_2, aes(x=ergebnis_2[, 1], y = Freq)) + 
+        geom_bar(stat = "identity", color = "black", fill = light,) + 
+        geom_text(aes(label = Freq), vjust = -0.3, size = 3.5) +
         labs(title = paste0(graftitle, "\n")) + 
         ylim(0, max(ergebnis_2$Freq)+round(max(ergebnis_2$Freq*0.25), 0)+1)+
         theme(
