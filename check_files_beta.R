@@ -35,14 +35,22 @@ fun_gather_all_data = function(){
   colnames(all_data) = names_all
   
   used_files = NULL
-  
+
   for(i in 1:length(data_files)){
     check_fname = substr(data_files[i], 1, 7)#--> read certain file names only
     if (check_fname == "results"){
       used_files = append(used_files, data_files[i])
       next_file = read_xlsx(data_files[i], col_names = T)
       colnames(next_file) = names(all_data)
-      all_data = rbind(all_data, next_file) 
+      
+      if (ncol(next_file) < 70){
+        print(data_files[i])
+        print(c("ncol: ", ncol(next_file)))
+        print("-------------------")        
+      }
+
+      
+      #all_data = rbind(all_data, next_file)
     }
   }
   #write_xlsx(all_data, "_result_file.xlsx")
@@ -60,142 +68,11 @@ fun_get_title = function(question){
 }
 
 
+
 all_data = fun_gather_all_data()
 
 used_files = unlist(all_data[2])
 all_data = as.data.frame(all_data[1])
 
-plot_data = all_data[, 8:length(all_data)]
 
-#--> replace the following by NA:
-plot_data[plot_data == "Keine Antwort"] = NA
-plot_data[plot_data == "Keine Angabe"] = NA
-plot_data[plot_data == "N. v."] = NA
-plot_data[plot_data == "N/A"] = NA
-
-plot_vars = (1:length(plot_data))
-#plot_vars = c(1:13)
-doplot = T
-
-
-
-#source("../corrplot.r")
-#stop("test only")
-
-
-# plots -------------------------------------------------------------------
-
-
-if (doplot == T){
-  
-  #--> use PDF:
-  pdf("LimesSurvey_alleErgebnisse.pdf", width = 12, height = 8, paper = "a4r")
-  par(mfrow = c(4, 1), mar = c(2, 2, 2, 2))
-  
-  
-  for (i in plot_vars){
-    #----------- plots -----------#
-
-    no_quest = i
-    plot_this = plot_data[no_quest]
-    graftitle = fun_get_title(no_quest)
-    
-    
-    if (i == 1){
-      plot_this[,1] = as.numeric(substr(plot_this[,1], 1, 4))
-      dummy_year = 2024 #--> 2do: use year of timestamp in questionaire
-      plot_this[,1] = dummy_year - plot_this[,1]
-      plot_this$age_group[plot_this[,1] < 20] = "jünger als 20"
-      plot_this$age_group[plot_this[,1] >= 20 & plot_this[,1] < 30] = "20 bis 29"
-      plot_this$age_group[plot_this[,1] >= 30 & plot_this[,1] < 40] = "30 bis 39"
-      plot_this$age_group[plot_this[,1] >= 40 & plot_this[,1] < 50] = "40 bis 49"
-      plot_this$age_group[plot_this[,1] >= 50 & plot_this[,1] < 60] = "50 bis 59"
-      plot_this$age_group[plot_this[,1] >= 60] = "60 und älter"
-      len_obs = na.omit(c(plot_this[,2]))
-      graftitle = paste0("Altersgruppen der Teilnehmer/innen in Jahren zum Zeitpunkt der Befragung (N = ", length(len_obs), ")")
-      plot_this = plot_this[2]
-      ##------------------------------------------------------------ 2do: als function definieren
-      ergebnis_2 = as.data.frame(table(plot_this))
-      #-------- plot -------
-      require(ggplot2)
-      
-      light = "#6BA1BB"
-      
-      p1 = ggplot(ergebnis_2, aes(x = ergebnis_2[, 1], y = Freq)) + 
-        geom_bar(stat = "identity", color = "black", fill = light,) + 
-        geom_text(aes(label = Freq), vjust = -0.3, size = 3.5) +
-        labs(title = paste0(graftitle, "\n")) + 
-        ylim(0, max(ergebnis_2$Freq) + round(max(ergebnis_2$Freq*0.25), 0) + 1) +
-        theme(
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          panel.background = element_blank(),
-          #axis.line.y = element_line(colour = "black"),
-          axis.line.y = element_blank(),
-          axis.line.x = element_blank(),
-          axis.title.x = element_blank(), #remove axis title
-          axis.title.y = element_blank(), #remove axis title
-          axis.text.y = element_blank(),  #remove axis labels
-          #axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
-          axis.text.x = element_text(angle = 35, vjust = 0.5, hjust = 0.35),
-          axis.ticks.x = element_blank(),  #remove axis ticks
-          axis.ticks.y = element_blank()  #remove axis ticks
-        )
-      plot(p1)
-      ##------------------------------------------------------------ 2do: als function definieren
-    }
-    
-    else if (i == 2){
-      insert = "../bulk_donut.R"
-      if(file.exists(insert)){print(
-        paste("inject ", insert))
-        source(insert)
-        plot(p_insert)
-        rm(p_insert)
-      }else {print(paste("file", insert, "not found for Column", i))}
-    }
-    
-    else if (i == 19){
-      #ergebnis = as.data.frame(na.omit(plot_data[19]))
-      ergebnis = as.data.frame(na.omit(plot_this)) #--> bad plot
-      #ergebnis = as.data.frame(plot_this)
-      grid.table(ergebnis)
-    }
-    
-    else{
-      
-      ergebnis_2 = as.data.frame(table(plot_this))
-      #-------- plot -------
-      require(ggplot2)
-      
-      p1 = ggplot(ergebnis_2, aes(x=ergebnis_2[, 1], y = Freq)) + 
-        geom_bar(stat = "identity", color = "black", fill = light,) + 
-        geom_text(aes(label = Freq), vjust = -0.3, size = 3.5) +
-        labs(title = paste0(graftitle, "\n")) + 
-        ylim(0, max(ergebnis_2$Freq)+round(max(ergebnis_2$Freq*0.25), 0)+1)+
-        theme(
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          panel.background = element_blank(),
-          #axis.line.y = element_line(colour = "black"),
-          axis.line.y = element_blank(),
-          axis.line.x = element_blank(),
-          axis.title.x=element_blank(), #remove axis title
-          axis.title.y=element_blank(), #remove axis title
-          axis.text.y=element_blank(),  #remove axis labels
-          #axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
-          axis.text.x = element_text(angle = 35, vjust = 0.5, hjust=.35),
-          axis.ticks.x=element_blank(),  #remove axis ticks
-          axis.ticks.y=element_blank()  #remove axis ticks
-        )
-      
-      plot(p1)
-      #---------------------
-    }
-    
-  }
-  
-  #--> close PDF
-  dev.off()
-}
 
