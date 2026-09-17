@@ -1,7 +1,6 @@
 
 #print("+ + + start bulk_donut + + +")
 
-
 #-------------------- example data ----------------------#
 #g_label = c("keine Angabe", "weiblich", "männlich")
 #g_count = c(1, 17, 8)
@@ -16,6 +15,14 @@ g_label = as.data.frame(table(plot_data[2]))
 g_label = as.vector(g_label[,1])
 gender_df = data.frame(Gender = g_label, g_count)
 
+len_obs = na.omit(plot_this[,1])
+graftitle = paste0("Angaben zur Identität (N = ", length(len_obs), ")")
+
+color_m = "#74A9CF"
+color_w = "#0570B0"
+color_d = "#D0D1E6"
+
+
 #hsize = 4
 hsize = 1.8
 
@@ -27,17 +34,14 @@ gender_df$hsize = hsize
 require(ggplot2)
 p_insert =  ggplot(gender_df, aes(x = hsize, y = g_count, fill = Gender)) +
   geom_col(color = "black") +
-  geom_text(aes(label = g_count),
-            position = position_stack(vjust = 0.5)) +
+  geom_text(aes(label = g_count), position = position_stack(vjust = 0.5)) +
   coord_polar(theta = "y") +
-  scale_fill_manual(values = c("#D0D1E6",
-                               "#74A9CF", "#0570B0"),
-                    guide = guide_legend(reverse = TRUE)
-                    ) + #reorder legend
+  #scale_fill_manual(values = c("#D0D1E6", "#74A9CF", "#0570B0"), guide = guide_legend(reverse = TRUE)) + #reorder legend
+  scale_fill_manual(values = c(color_d, color_m, color_w), guide = guide_legend(reverse = TRUE)) + #reorder legend
   #xlim(c(0.5, hsize + 1,5)) +
   #xlim(c(0.5, hsize + 1)) +
   xlim(c(0.6, hsize + .7)) +
-  ggtitle("Angaben zur Geschlechtsidentität") +
+  ggtitle(graftitle) +
   theme(panel.background = element_rect(fill = "white"),
         panel.grid = element_blank(),
         axis.title = element_blank(),
