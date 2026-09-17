@@ -60,24 +60,42 @@ fun_get_title = function(question){
 }
 
 
+
+# data manipulation -------------------------------------------------------
+
+
 all_data = fun_gather_all_data()
-
 used_files = unlist(all_data[2])
+
+#+++++++++++++++++++++++++++++++++++#
 all_data = as.data.frame(all_data[1])
+#+++++++++++++++++++++++++++++++++++#
 
-plot_data = all_data[, 8:length(all_data)]
-
+plot_data = all_data
 #--> replace the following by NA:
 plot_data[plot_data == "Keine Antwort"] = NA
 plot_data[plot_data == "Keine Angabe"] = NA
 plot_data[plot_data == "N. v."] = NA
 plot_data[plot_data == "N/A"] = NA
 
+#--> get year_stamp for "Altersgruppen zum Zeitpunkt der Befragung"
+year_stamp = plot_data[2] |>
+  unlist() |>
+  as.Date(format = "%Y-%m-%d %H:%M:%S") |>
+  format("%Y") |>
+  as.data.frame()
+#--> make it num
+year_stamp = as.data.frame(apply(year_stamp, 2, function(x) as.numeric(x)))
+
+#--> remove first columns
+plot_data = plot_data[, 8:length(all_data)]
+
+#--> when to end loop
 plot_vars = (1:length(plot_data))
 #plot_vars = c(1:13)
+
+
 doplot = T
-
-
 
 #source("../corrplot.r")
 #stop("test only")
@@ -95,7 +113,7 @@ if (doplot == T){
   
   for (i in plot_vars){
     #----------- plots -----------#
-
+    
     no_quest = i
     plot_this = plot_data[no_quest]
     graftitle = fun_get_title(no_quest)
@@ -103,8 +121,7 @@ if (doplot == T){
     
     if (i == 1){
       plot_this[,1] = as.numeric(substr(plot_this[,1], 1, 4))
-      dummy_year = 2024 #--> 2do: use year of timestamp in questionaire
-      plot_this[,1] = dummy_year - plot_this[,1]
+      plot_this[,1] = year_stamp[, 1] - plot_this[,1]
       plot_this$age_group[plot_this[,1] < 20] = "jünger als 20"
       plot_this$age_group[plot_this[,1] >= 20 & plot_this[,1] < 30] = "20 bis 29"
       plot_this$age_group[plot_this[,1] >= 30 & plot_this[,1] < 40] = "30 bis 39"
@@ -163,8 +180,13 @@ if (doplot == T){
     }
     
     else{
-      
+      #--> all other questions
       ergebnis_2 = as.data.frame(table(plot_this))
+      
+      
+      len_obs = na.omit(c(plot_this[, 1]))
+      graftitle = paste0(graftitle, " (N = ", length(len_obs), ")")
+      
       #-------- plot -------
       require(ggplot2)
       
@@ -198,4 +220,3 @@ if (doplot == T){
   #--> close PDF
   dev.off()
 }
-
